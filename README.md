@@ -19,3 +19,5 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 ## example
 [Cumulative Layout Shift](https://web.dev/articles/cls?hl=zh-cn)
 
+## data
+项目的文件夹中 /scripts ，有一个名为 seed.js .此脚本包含有关创建 invoices 和 customers user 设定 、 、 revenue 表的说明。
