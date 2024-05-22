@@ -1,4 +1,6 @@
+// Root layout 根布局
 // 将全局样式添加到应用程序
+
 import '@/app/ui/global.css';
 
 import { inter } from '@/app/ui/fonts'; // 在全局字体配置中引入 inter
