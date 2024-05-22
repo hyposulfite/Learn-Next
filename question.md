@@ -12,4 +12,5 @@
    按路由拆分代码意味着页面变得孤立。如果某个页面抛出错误，应用程序的其余部分仍将正常工作
    [ how navigation works](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#how-routing-and-navigation-works)
 4. [this guide on GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/quickstart-for-repositories)
-5. 
+5. [ Segment Config Option ](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config)
+6. 
