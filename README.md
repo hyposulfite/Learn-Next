@@ -14,6 +14,7 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 > 优先使用 Tailwind CSS
 [clsx](https://www.npmjs.com/package/clsx) 文档：[https://github.com/lukeed/clsx](https://github.com/lukeed/clsx)
 > 轻松切换类名 动态切换类名
+[Vercel Postgres SDK](https://vercel.com/docs/storage/vercel-postgres/sdk)
 
 ## example
 [Cumulative Layout Shift](https://web.dev/articles/cls?hl=zh-cn)
