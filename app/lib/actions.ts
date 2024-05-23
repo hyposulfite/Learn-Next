@@ -76,3 +76,10 @@ export async function updateInvoice(id: string, formData: FormData) {
     // 调用 redirect 以将用户重定向到发票的页面。
     redirect('/dashboard/invoices');
 }
+
+// 删除数据
+export async function deleteInvoice(id: string) {
+    await sql`DELETE FROM invoices WHERE id = ${id}`;
+    // 调用 revalidatePath 以清除客户端缓存并发出新的服务器请求。
+    revalidatePath('/dashboard/invoices');
+}
