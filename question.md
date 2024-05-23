@@ -17,3 +17,5 @@
 7. [navigating between pages](https://nextjs.org/learn/dashboard-app/navigating-between-pages)
 8.  Controlled vs. Uncontrolled: In React, there are two types of components: controlled and uncontrolled.
 9. [ use-debounce](https://www.npmjs.com/package/use-debounce)
+10. react form action 属性
+11. [Zod](https://zod.dev/) ：a TypeScript-first validation library that can simplify this task for you.
