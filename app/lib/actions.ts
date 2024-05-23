@@ -14,6 +14,7 @@ const FormSchema = z.object({
     date: z.string(),
 });
 
+// 新增数据
 const CreateInvoice = FormSchema.omit({id: true, date: true});
 
 export async function createInvoice(formData: FormData) {
@@ -49,5 +50,29 @@ export async function createInvoice(formData: FormData) {
     revalidatePath('/dashboard/invoices');
     // 将重新验证 /dashboard/invoices 路径，并从服务器获取新数据
     // 将用户重定向回页面 /dashboard/invoices
+    redirect('/dashboard/invoices');
+}
+
+//修改数据
+// Use Zod to update the expected types 使用 Zod 验证类型。
+const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+
+export async function updateInvoice(id: string, formData: FormData) {
+    const { customerId, amount, status } = UpdateInvoice.parse({
+        customerId: formData.get('customerId'),
+        amount: formData.get('amount'),
+        status: formData.get('status'),
+    });
+    // 将金额转换为美分。
+    const amountInCents = amount * 100;
+    // 将变量传递给 SQL 查询。
+    await sql`
+    UPDATE invoices
+    SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+    WHERE id = ${id}
+  `;
+    // 调用 revalidatePath 以清除客户端缓存并发出新的服务器请求。
+    revalidatePath('/dashboard/invoices');
+    // 调用 redirect 以将用户重定向到发票的页面。
     redirect('/dashboard/invoices');
 }
