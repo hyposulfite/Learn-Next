@@ -8,22 +8,48 @@ import { redirect } from 'next/navigation';
 
 const FormSchema = z.object({
     id: z.string(),
-    customerId: z.string(),
-    amount: z.coerce.number(), // 设置为强制（更改）从字符串到数字，同时验证其类型。
-    status: z.enum(['pending', 'paid']),
+    customerId: z.string({
+        invalid_type_error: 'Please select a customer.',
+    }),
+    amount: z.coerce.number()
+        .gt(0, { message: 'Please enter an amount greater than $0.' }),
+    // 设置为强制（更改）从字符串到数字，同时验证其类型。
+    status: z.enum(['pending', 'paid'], {
+        invalid_type_error: 'Please select an invoice status.',
+    }),
     date: z.string(),
 });
+export type State = {
+    errors?: {
+        customerId?: string[];
+        amount?: string[];
+        status?: string[];
+    };
+    message?: string | null;
+};
 
 // 新增数据
 const CreateInvoice = FormSchema.omit({id: true, date: true});
 
-export async function createInvoice(formData: FormData) {
+// export async function createInvoice(formData: FormData) {
+export async function createInvoice(prevState: State, formData: FormData) {
     // const rawFormData = {
-    const {customerId, amount, status} = CreateInvoice.parse({
+    // const {customerId, amount, status} = CreateInvoice.parse({
+    // safeParse() 将返回包含 success/ error 字段的对象。这将有助于更优雅地处理验证，而无需将此逻辑放入块中 try/catch
+    const validatedFields  = CreateInvoice.safeParse({
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status'),
     })
+    // 将信息发送到数据库之前，请检查表单字段是否已使用条件正确验证
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Create Invoice.',
+        };
+    }
+    // Prepare data for insertion into the database
+    const { customerId, amount, status } = validatedFields.data;
     // 货币单位设置成美分 ， 消除浮点数的错误
     const amountInCents = amount * 100;
 
@@ -48,9 +74,9 @@ export async function createInvoice(formData: FormData) {
     // 使用 JavaScript try/catch 的语句和 Next.js API 优雅地处理错误。
     try {
         await sql`
-      INSERT INTO invoices (customer_id, amount, status, date)
-      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
-    `;
+          INSERT INTO invoices (customer_id, amount, status, date)
+          VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+        `;
     } catch (error) {
         return {
             message: 'Database Error: Failed to Create Invoice.',
