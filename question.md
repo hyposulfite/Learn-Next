@@ -14,4 +14,6 @@
 4. [this guide on GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/quickstart-for-repositories)
 5. [ Segment Config Option ](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config)
 6. [read again](https://nextjs.org/learn/dashboard-app/partial-prerendering)
-7. 
+7. [navigating between pages](https://nextjs.org/learn/dashboard-app/navigating-between-pages)
+8.  Controlled vs. Uncontrolled: In React, there are two types of components: controlled and uncontrolled.
+9. [ use-debounce](https://www.npmjs.com/package/use-debounce)
