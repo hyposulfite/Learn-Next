@@ -19,3 +19,4 @@
 9. [ use-debounce](https://www.npmjs.com/package/use-debounce)
 10. react form action 属性
 11. [Zod](https://zod.dev/) ：a TypeScript-first validation library that can simplify this task for you.
+12. [error.tsx](https://nextjs.org/docs/app/api-reference/file-conventions/error)

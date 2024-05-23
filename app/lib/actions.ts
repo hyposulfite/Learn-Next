@@ -40,10 +40,23 @@ export async function createInvoice(formData: FormData) {
     //     console.log(rawFormData);
     //     console.log(typeof rawFormData.amount);
     //     插入数据库
-    await sql`
-        INSERT INTO invoices (customer_id, amount, status, date)
-        VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
-      `;
+    // await sql`
+    //     INSERT INTO invoices (customer_id, amount, status, date)
+    //     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+    //   `;
+
+    // 使用 JavaScript try/catch 的语句和 Next.js API 优雅地处理错误。
+    try {
+        await sql`
+      INSERT INTO invoices (customer_id, amount, status, date)
+      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+    `;
+    } catch (error) {
+        return {
+            message: 'Database Error: Failed to Create Invoice.',
+        };
+    }
+
     // Next.js有一个客户端路由器缓存，用于在用户的浏览器中存储一段时间的路由段。
     // 除了预取之外，此缓存还确保用户可以在路由之间快速导航，同时减少对服务器发出的请求数
     // 更新发票路由中显示的数据，因此您需要清除此缓存并触发对服务器的新请求
@@ -66,11 +79,24 @@ export async function updateInvoice(id: string, formData: FormData) {
     // 将金额转换为美分。
     const amountInCents = amount * 100;
     // 将变量传递给 SQL 查询。
-    await sql`
-    UPDATE invoices
-    SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
-    WHERE id = ${id}
-  `;
+
+    //   await sql`
+    //   UPDATE invoices
+    //   SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+    //   WHERE id = ${id}
+    // `;
+
+    // 使用 JavaScript try/catch 的语句和 Next.js API 优雅地处理错误。
+    try {
+        await sql`
+        UPDATE invoices
+        SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+        WHERE id = ${id}
+      `;
+    } catch (error) {
+        return { message: 'Database Error: Failed to Update Invoice.' };
+    }
+
     // 调用 revalidatePath 以清除客户端缓存并发出新的服务器请求。
     revalidatePath('/dashboard/invoices');
     // 调用 redirect 以将用户重定向到发票的页面。
@@ -79,7 +105,18 @@ export async function updateInvoice(id: string, formData: FormData) {
 
 // 删除数据
 export async function deleteInvoice(id: string) {
-    await sql`DELETE FROM invoices WHERE id = ${id}`;
-    // 调用 revalidatePath 以清除客户端缓存并发出新的服务器请求。
-    revalidatePath('/dashboard/invoices');
+    throw new Error('Failed to Delete Invoice');
+    // await sql`DELETE FROM invoices WHERE id = ${id}`;
+    // // 调用 revalidatePath 以清除客户端缓存并发出新的服务器请求。
+    // revalidatePath('/dashboard/invoices');
+
+    // 使用 JavaScript try/catch 的语句和 Next.js API 优雅地处理错误。
+    try {
+        await sql`DELETE FROM invoices WHERE id = ${id}`;
+        // 调用 revalidatePath 以清除客户端缓存并发出新的服务器请求。
+        revalidatePath('/dashboard/invoices');
+        return { message: 'Deleted Invoice.' };
+    } catch (error) {
+        return { message: 'Database Error: Failed to Delete Invoice.' };
+    }
 }
