@@ -3,6 +3,8 @@ import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 // import { fetchCustomers } from '@/app/lib/data';
 import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
 
+import { notFound } from 'next/navigation';
+
 // export default async function Page() {
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
@@ -10,6 +12,11 @@ export default async function Page({ params }: { params: { id: string } }) {
         fetchInvoiceById(id),
         fetchCustomers(),
     ]);
+    if (!invoice) {
+        // test
+        // For example, visit http://localhost:3000/dashboard/invoices/2e94d1ed-d220-449f-9f11-f0bbceed9645/edit
+        notFound();
+    }
     return (
         <main>
             <Breadcrumbs
